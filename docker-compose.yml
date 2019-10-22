@@ -1,0 +1,51 @@
+version: '2'
+
+services:
+
+  elasticsearch:
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    ports:
+      - "9202:9200"
+      - "9302:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: changeme
+    networks:
+      - elk
+
+  kibana:
+    build:
+      context: kibana/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    ports:
+      - "5602:5601"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  malik-montana:
+    build:
+      context: .
+    depends_on:
+      - elasticsearch
+    environment:
+      - malik.time.start=2019-10-23T14:00:00+00:00
+      - malik.time.end=2019-10-23T16:00:00+00:00
+      - malik.price.factor=0.5
+
+
+
+
+networks:
+
+  elk:
+    driver: bridge
