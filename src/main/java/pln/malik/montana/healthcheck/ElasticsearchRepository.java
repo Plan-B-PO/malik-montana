@@ -1,4 +1,10 @@
 package pln.malik.montana.healthcheck;
 
-public class ElasticsearchRepository {
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ElasticsearchRepository <DTO> {
+
+  DTO indexComputationOccurrence(DTO dto);
+
 }
