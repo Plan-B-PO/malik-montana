@@ -1,27 +1,21 @@
 package pln.malik.montana.healthcheck;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
-import org.springframework.web.reactive.function.server.ServerRequest;
-import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import reactor.core.publisher.Mono;
 
 @AllArgsConstructor
-@Controller
+@RequestMapping(path = "/info")
 public class UserApplicationController {
 
   private ComputationOccurrenceIndexerCommand computationOccurrenceIndexerCommand;
 
-  Mono<ServerResponse> postInfo(ServerRequest request) {
-    return computationOccurrenceIndexerCommand.execute(request);
+  @PostMapping
+  public Mono<ResponseEntity<Void>> postInfo(@RequestBody Mono<ComputationOccurrenceRequest> request) {
+    return computationOccurrenceIndexerCommand.execute(request).map(ResponseEntity::ok);
   }
 
-  RouterFunction<ServerResponse> route;
-
-  {
-    RouterFunctions.route()
-      .POST("/info", this::postInfo).build();
-  }
 }

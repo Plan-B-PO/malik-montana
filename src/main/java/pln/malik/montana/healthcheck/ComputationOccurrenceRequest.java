@@ -8,11 +8,7 @@ import java.util.UUID;
 public class ComputationOccurrenceRequest {
 
   UUID applicationUUID;
-  UserApplicationStatus status;
+  ComputationOccurrenceEntity.UserApplicationStatus status;
 
 
-  static enum UserApplicationStatus {
-    SUBMITTED, ASSIGNED, WORKING, COMPLETED, FAILED, REJECTED, ABORTED, PAUSED, INTERACTION_REQUIRED
-
-  }
 }

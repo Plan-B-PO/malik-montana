@@ -1,24 +1,28 @@
 package pln.malik.montana.healthcheck;
 
-import org.apache.http.HttpHost;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.context.annotation.Bean;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.client.ClientConfiguration;
+import org.springframework.data.elasticsearch.client.reactive.ReactiveElasticsearchClient;
+import org.springframework.data.elasticsearch.client.reactive.ReactiveRestClients;
+import org.springframework.data.elasticsearch.config.AbstractReactiveElasticsearchConfiguration;
+import org.springframework.data.elasticsearch.repository.config.EnableReactiveElasticsearchRepositories;
 
+@RequiredArgsConstructor
 @Configuration
-class ElasticsearchConfiguration {
+@EnableReactiveElasticsearchRepositories
+class ElasticsearchConfiguration extends AbstractReactiveElasticsearchConfiguration {
 
-  @Bean
-  RestHighLevelClient restHighLevelClient() {
-    return new RestHighLevelClient(
-      RestClient
-        .builder(new HttpHost("elasticsearch", 9202))
-        .setRequestConfigCallback(config -> config
-          .setConnectTimeout(5_000)
-          .setConnectionRequestTimeout(5_000)
-          .setSocketTimeout(5_000)
-        )
-    );
+  private final ElasticsearchProperties properties;
+
+  @Override
+  public ReactiveElasticsearchClient reactiveElasticsearchClient () {
+    var clientConfiguration = ClientConfiguration.builder()
+      .connectedTo(properties.getHosts())
+      .withConnectTimeout(properties.getConnectTimeout())
+      .withSocketTimeout(properties.getSocketTimeout())
+      .build();
+    return ReactiveRestClients.create(clientConfiguration);
   }
 }
+

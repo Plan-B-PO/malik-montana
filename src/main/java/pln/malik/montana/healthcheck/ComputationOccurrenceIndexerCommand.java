@@ -8,15 +8,22 @@ import reactor.core.publisher.Mono;
 @Service
 public class ComputationOccurrenceIndexerCommand {
 
-  private ElasticsearchRepository elasticsearchRepository;
+  private ComputationOccurrenceRepository computationOccurrenceRepository;
 
-  private ConsumedCreditsCalculationService consumedCreditsCalculationService;
+  private ConsumedCreditsService consumedCreditsService;
 
-  private EstimatedPriceCalculationService estimatedPriceCalculationService;
+  private EstimatedPriceService estimatedPriceService;
 
-  public Mono<ComputationOccurrenceResponse> execute(Mono<ComputationOccurrenceRequest> request) {
-
-    return Mono.empty();
+  public Mono<Void> execute(Mono<ComputationOccurrenceRequest> request) {
+    return request
+      .map(req -> ComputationOccurrenceEntity.builder()
+        .applicationUUID(req.getApplicationUUID())
+        .status(req.getStatus())
+        .consumedCredits(consumedCreditsService.calculate())
+        .estimatedPrice(estimatedPriceService.calculate())
+        .build())
+      .flatMap(computationOccurrenceRepository::save)
+      .then();
   }
 
 }
