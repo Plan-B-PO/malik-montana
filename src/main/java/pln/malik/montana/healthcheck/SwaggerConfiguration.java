@@ -20,4 +20,19 @@ public class SwaggerConfiguration {
       .paths(PathSelectors.any())
       .build();
   }
+
+//  @Bean
+//  public DocumentationPluginsBootstrapper documentationPluginsBootstrapper(
+//   DocumentationPluginsManager documentationPluginsManager,
+//   List<RequestHandlerProvider> handlerProviders,
+//   DocumentationCache documentationCache,
+//   ApiDocumentationScanner apiDocumentationScanner,
+//   TypeResolver typeResolver,
+//   Defaults defaults,
+//   PathProvider pathProvider,
+//   Environment environment
+//  ) {
+//    return  new DocumentationPluginsBootstrapper(documentationPluginsManager, handlerProviders, documentationCache, apiDocumentationScanner, typeResolver, defaults, pathProvider, environment);
+//
+//  }
 }

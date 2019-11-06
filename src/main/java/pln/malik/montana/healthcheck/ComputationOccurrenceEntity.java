@@ -3,12 +3,14 @@ package pln.malik.montana.healthcheck;
 import lombok.Builder;
 import lombok.Value;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Builder
 @Value
+@Document(indexName = "computation-occurrence")
 class ComputationOccurrenceEntity {
   @Id
   String id;

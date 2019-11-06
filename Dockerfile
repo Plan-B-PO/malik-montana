@@ -10,3 +10,4 @@ WORKDIR /usr/src/java-app
 RUN cp /usr/src/java-code/build/libs/*.jar ./app.jar
 CMD ["java", "-jar", "app.jar"]
 
+RUN /usr/src/java-code/src/test/resources/simple-test-simulation.sh

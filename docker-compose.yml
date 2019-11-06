@@ -15,8 +15,6 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELASTIC_PASSWORD: changeme
-    networks:
-      - elk
 
   kibana:
     build:
@@ -29,8 +27,6 @@ services:
       - 5601:5601
     expose:
       - 5601
-    networks:
-      - elk
     depends_on:
       - elasticsearch
 
@@ -49,7 +45,3 @@ services:
       - malik.priceFactor=0.5
       - elasticsearch.hosts=elasticsearch:9200
 
-networks:
-
-  elk:
-    driver: bridge
