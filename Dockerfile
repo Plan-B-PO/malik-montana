@@ -7,9 +7,11 @@ RUN gradle :bootJar --stacktrace --scan
 
 WORKDIR /usr/src/java-app
 
-RUN apt install curl uuidgen -y
+RUN apt-get update && apt-get install curl uuid-runtime -y
+
 RUN cp /usr/src/java-code/build/libs/*.jar ./app.jar
 
-RUN nohup bash -c "/usr/src/java-code/src/test/resources/simple-test-simulation.sh" && sleep 20
+CMD ["nohup", "bash", "-c", "/usr/src/java-code/src/test/resources/simple-test-simulation.sh", "sleep", "10"]
+
 CMD ["java", "-jar", "app.jar"]
 
