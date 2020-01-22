@@ -1,27 +1,32 @@
 package pln.malik.montana.integration;
 
-import lombok.Builder;
-import lombok.Value;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.w3c.dom.Node;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@Value
+@Data
 @Document(indexName = "computation-occurrence")
 class ComputationOccurrenceEntity {
   @Id
-  String id;
+  private String id;
 
-  UUID applicationUUID;
+  private UUID applicationUUID;
 
-  UserApplicationStatus status;
+  private UserApplicationStatus status;
 
-  BigDecimal consumedCredits;
+  private BigDecimal consumedCredits;
 
-  BigDecimal estimatedPrice;
+  private BigDecimal estimatedPrice;
 
   enum UserApplicationStatus {
     SUBMITTED, ASSIGNED, WORKING, COMPLETED, FAILED, REJECTED, ABORTED, PAUSED, INTERACTION_REQUIRED

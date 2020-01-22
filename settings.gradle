@@ -1,3 +1,4 @@
 rootProject.name = 'healthcheck'
 include 'integration'
+include 'healthcheck'
 

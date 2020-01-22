@@ -1,11 +1,12 @@
 package pln.malik.montana.healthcheck;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import java.util.UUID;
 
-@Value
+@Data
 public class ComputationOccurrenceRequest {
 
   UUID applicationUUID;

@@ -4,7 +4,11 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -12,20 +16,18 @@ public class ApplicationQuery {
 
   private final ComputationOccurrenceRepository computationOccurrenceRepository;
 
-  public Mono<Response> logic(Mono<Request> request) {
-    return null;
+  public Mono<ApplicationResponse> logic(Mono<UUID> request) {
+    return request
+      .map(computationOccurrenceRepository::findAllByApplicationUUID)
+      .flatMap(Flux::collectList)
+      .map(ApplicationResponse::new);
   }
 
   @Builder
   @Value
-  public class Request {
+  public static class ApplicationResponse {
 
-
-  }
-
-  @Builder
-  @Value
-  public class Response {
+    List<ComputationOccurrenceEntity> logs;
 
   }
 }

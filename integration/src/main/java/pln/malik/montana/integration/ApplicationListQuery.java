@@ -1,9 +1,9 @@
 package pln.malik.montana.integration;
 
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -16,41 +16,19 @@ public class ApplicationListQuery {
 
   private final ComputationOccurrenceRepository computationOccurrenceRepository;
 
-  public Mono<Response> logic(Mono<Request> request) {
-    computationOccurrenceRepository.findAll().map(entity ->
-      Response.ComputationOccurrence.builder()
-        .applicationUUID(entity.getApplicationUUID())
-        .id(entity.getId())
-        .build()
-
-    )
+  public Mono<ApplicationListResponse> logic() {
+    return computationOccurrenceRepository.findAll()
+      .map(ComputationOccurrenceEntity::getApplicationUUID)
+      .distinct()
       .collectList()
-      .map( occurrences)
-    return null;
+      .map(occurrences -> ApplicationListResponse.builder().applicationUUIDs(occurrences).build());
   }
 
   @Builder
   @Value
-  public class Request {
+  public static class ApplicationListResponse {
 
-
-
-  }
-
-  @Builder
-  @Value
-  public class Response {
-
-    List<ComputationOccurrence> applicationList;
-
-    @Builder
-    @Value
-    public class ComputationOccurrence {
-      String id;
-      UUID applicationUUID;
-    }
-
-
+    List<UUID> applicationUUIDs;
 
   }
 }

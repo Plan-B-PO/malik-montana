@@ -32,7 +32,7 @@ services:
 
   malik-montana:
     build:
-      context: .
+      context: ./healthcheck
     depends_on:
       - elasticsearch
     ports:
@@ -43,5 +43,18 @@ services:
       - malik.timeStart=2019-11-20T10:00:00+00:00
       - malik.timeEnd=2019-11-21T16:00:00+00:00
       - malik.priceFactor=0.5
+      - elasticsearch.hosts=elasticsearch:9200
+
+
+  logger-integration:
+    build:
+      context: ./integration
+    depends_on:
+      - elasticsearch
+    ports:
+      - 8081:8081
+    expose:
+      - 8081
+    environment:
       - elasticsearch.hosts=elasticsearch:9200
 
